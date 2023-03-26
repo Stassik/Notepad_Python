@@ -44,20 +44,6 @@ def main_import_to_notepad():
         for item in notepad:
             print('ID: {} | Заголовок: {}\nТекст: {}\nДата: {}'.format(notepad[item].split(sep=";")[0], notepad[item].split(sep=";")[1], notepad[item].split(sep=";")[2], notepad[item].split(sep=";")[3]))
 
-# Поиск записи
-def search_note(some_str):
-    notepad = import_to_notepad()
-    count = 0
-    print("\nРезультат поиска:")
-    for i in notepad:
-        if some_str in notepad[i]:
-            print('{} | {}'.format(i+1, notepad[i]))
-            count+=1
-    if count != 0:
-        print(f'Всего найдено: {count}')
-    else:
-        print('Ничего не найдено')
-        exit
 
 # Перезапись 
 def replace_notepad(messege, new_notepad):
