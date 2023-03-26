@@ -1,4 +1,5 @@
 import datetime
+import random
 import os
 date = datetime.datetime.now().strftime("%Y-%m-%d / %H:%M:%S")
 
@@ -7,15 +8,18 @@ date = datetime.datetime.now().strftime("%Y-%m-%d / %H:%M:%S")
 def input_note():
     note_elem = ["заголовок", "текст"]
     new_note = list()
+    notepad = dict()
     for i in range(len(note_elem)):
         new_note.insert(i, input(f"Введите {note_elem[i]}: "))
     new_note.insert(2, date)
-    export_to_notepad(new_note)
+    notepad[random.randint(1000, 10000)] = new_note 
+    export_to_notepad(notepad)
     print("Заметка добавлена...")
 
-def export_to_notepad(new_note):
+def export_to_notepad(notepad):
     with open('notepad.csv', 'a+', encoding='utf-8') as data:
-        data.writelines(';'.join(new_note)+'\n')
+        for item in notepad:
+            data.writelines('{};{}'.format(item, ';'.join(notepad[item])) +'\n')
 
 
 def import_to_notepad():
@@ -30,9 +34,15 @@ def import_to_notepad():
 
 
 def main_import_to_notepad():
-    notepad = import_to_notepad()
-    for item in notepad:
-        print('{}: {}'.format(item+1, notepad[item]))
+    notepad = dict()        
+    with open('notepad.csv', 'r', encoding='utf-8') as data:
+        notes = data.readlines()
+        if len(notes) == 0:
+            print("Нет ни одной записи.\nСоздайте заметку.")
+        for i in range(len(notes)):
+            notepad[i] = notes[i]
+        for item in notepad:
+            print('{}: {}'.format(item+1, notepad[item]))
 
 
 # Перезапись 
@@ -56,8 +66,8 @@ def edit_note():
                 user_choice = int(input('\n1 - Заголовок\n2 - Текст\n'))
                 for i in range(len(note_elem)):
                     if i == (user_choice-1):    
-                        note[i] = input(f'Введите новый {note_elem[i]}: ')
-                note[2] = date
+                        note[user_choice] = input(f'Введите новый {note_elem[i]}: ')
+                note[3] = date
                 notes[id_note-1] = (';'.join(note)+'\n')
                 replace_notepad('Сохранено...', notes)
 
